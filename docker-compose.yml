@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+  traefik:
+    image: "traefik:latest"
+    container_name: "traefik"
+    hostname: "traefik"
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./traefik.yml:/traefik.yml:ro"
+      - "./acme.json:/acme.json:rw"
+    labels:
+      - "traefik.enable=true"
+      ## DNS CHALLENGE
+      - "traefik.http.routers.traefik.tls.certresolver=lets-encr"
+      - "traefik.http.routers.traefik.tls.domains[0].main=*.$MY_DOMAIN"
+      - "traefik.http.routers.traefik.tls.domains[0].sans=$MY_DOMAIN"
+      ## HTTP REDIRECT
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.redirect-https.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.redirect-https.entrypoints=web"
+      - "traefik.http.routers.redirect-https.middlewares=redirect-to-https"
+      ## triying to make work dashboard
+      - "traefik.http.routers.traefik.rule=Host(`monitor.$MY_DOMAIN`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.middlewares=authtraefik"
+      - "traefik.http.middlewares.authtraefik.basicauth.users=$MY_USER"
+
+networks:
+  default:
+    external:
+      name: $DEFAULT_NETWORK
