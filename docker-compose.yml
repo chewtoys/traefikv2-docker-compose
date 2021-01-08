@@ -34,7 +34,7 @@ services:
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.middlewares=authtraefik"
       - "traefik.http.middlewares.authtraefik.basicauth.users=$MY_USER"
-       - "traefik.http.routers.app-secure.middlewares=sslheader@docker"
+      - "traefik.http.routers.app-secure.middlewares=sslheader@docker"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       ##WEBSOCKET CONNECTIONS ENABLE
       - "traefik.http.routers.delivery.rule=Host(`delivery.$MY_DOMAIN`)"
