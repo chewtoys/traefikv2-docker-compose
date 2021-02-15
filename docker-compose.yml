@@ -11,6 +11,7 @@ services:
       - "80:80"
       - "443:443"
       - "8080:8080"
+      - "81:81"
     command: --providers.docker
     privileged: true  
     volumes:
@@ -36,10 +37,6 @@ services:
       - "traefik.http.middlewares.authtraefik.basicauth.users=$MY_USER"
       - "traefik.http.routers.app-secure.middlewares=sslheader@docker"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
-      ##WEBSOCKET CONNECTIONS ENABLE
-      - "traefik.http.routers.delivery.rule=Host(`delivery.$MY_DOMAIN`)"
-      - "traefik.http.routers.delivery.tls.certresolver=secure"
-      - "traefik.http.routers.delivery.middlewares=sslheader"
 
  
 networks:
