@@ -3,6 +3,7 @@ Traefik version 2.3
 
 
 Clonamos el repositorio, copoiamos el archivo env o los renombramos a .env  editamos las variables del archivo .env
+
 $ mv env .env
 
 Api cloudflare necesaria para la resolucion dns, es un stack para este provider
